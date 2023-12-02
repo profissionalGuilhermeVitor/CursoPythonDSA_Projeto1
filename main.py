@@ -1,12 +1,13 @@
 import random
 import re
 import forca
+import limpa_tela
 
 print("-----------------------------------------JOGO DA FORCA------------------------------------------")
 #Algoritmo e passos
 # 1. Gerar palavra aleatoria das que eu colocar na lista
 
-
+limpa_tela.limpa_tela()
 listaPal = ["COMIDA FODA","EMPREGO BOM","STAR WARS","BLEACH","O PODEROSO CHEFAO","GHOSTBUSTERS","SOCIEDADE DO ANEL","MATRIX"]
 letraCerta = []
 letraErrada =[]
@@ -34,6 +35,7 @@ while(len(letra) > 1 or bool(f) == False):#Enquanto o usuário digitar mais de 2
 letrasFaltantes = len(palavra.replace(" ",""))# Conta letras da palavra sem o espaço
 
 while(chances != 0 or letrasFaltantes == 0):
+    print(palavra)
     while(len(letra) > 1 or bool(f) == False):#Enquanto o usuário digitar mais de 2 caracteres ou fora do padrão pedido,repete
         letra = input("Não está correto!!\nDigite uma letra Maíuscula[A-Z]: ")
         f = re.search(r'[A-Z]',letra)
@@ -42,10 +44,11 @@ while(chances != 0 or letrasFaltantes == 0):
         if(letra == t):#Se a letra for igual ao index
             cont +=1#Se passar desse if, conte a letra
             print(t,end=" ")#Imprime a letra
-            if(t in letraCerta):# Se a letra repetir
+            if(t in letraCerta and cont<2):# Se a letra repetir
                 print(t,end=" ")#Imprime a letra
+                print("ERRO")
                 continue
-            else:#Se não adicione a letra nas certas
+            elif(cont<2):#Se não adicione a letra nas certas
                 letraCerta.append(t)
         elif(t == " "):
             print(" ", end=" ")
