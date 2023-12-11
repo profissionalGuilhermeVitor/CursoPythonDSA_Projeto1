@@ -12,7 +12,7 @@ class Forca:
         self.chances = chances
 #mostrar_palavra: Este método deve exibir a palavra oculta, mostrando as letras adivinhadas e substituindo as não adivinhadas por "_".
     def mostrar_palavra(self):
-        palOculta = [i if  i in letrasCor or re.search(r'[A-Z]',i) else "_" for i in self.palavra]
+        palOculta = [i if  i in letrasCor or i == " " else "_" for i in self.palavra]
         for i in palOculta:
             if i == " ":
                 print(" ",end=" ")
@@ -27,15 +27,17 @@ class Forca:
         else:
             letrasErr.append(letra)
             self.chances -=1
-            forca.desenha_forca(self.chances)
+            forca.printForca(self.chances)
             
 
 #jogo_terminado: Este método deve verificar se o jogo terminou, ou seja, se o jogador adivinhou todas as letras ou excedeu o número máximo de tentativas.
     def jogo_terminado(self):
         for i in self.palavra:
-            if i in letrasCor:
+            if i in letrasCor:  
                 continue
             else:
+                if i == " ":
+                    continue
                 return False               
         return True
 
@@ -75,12 +77,14 @@ palavras = [
 ]
 if __name__=="__main__":
     palavra = palavras[random.randint(0,len(palavras)-1)]
+    palavra = palavra.upper()
+    f1 = Forca(palavra,letrasCor,letrasErr,chances)
+    f1.mostrar_palavra()
     letra = input("\nDigite uma letra:")
 
-    while(not(re.search(r'[A-Z]',letra))):
+    while(not(bool(re.search(r'[A-Z0-9]',letra)))):
         letra = input("\nDigite uma letra:")
 
-    f1 = Forca(palavra,letrasCor,letrasErr,chances)
     f1.tentativa(letra)
     f1.mostrar_palavra()
     print("\nLetras Corretas" , letrasCor)
@@ -88,12 +92,15 @@ if __name__=="__main__":
 
     while(chances ==0 or not(f1.jogo_terminado())):
         letra = input("\nDigite uma letra:")
+        while(not(bool(re.search(r'[A-Z0-9]',letra)))):
+            letra = input("\nDigite uma letra:")
+        if letra in letrasCor:
+            continue
         f1.tentativa(letra)
         print("\nLetras Corretas", letrasCor)
         print("\nLetras Erradas", letrasErr)
         f1.mostrar_palavra()
 
-        print(chances)
         if f1.jogo_terminado():
             print("PARABÉNS!!!!")
             break
